@@ -5,7 +5,12 @@
         <group>
             <file>file:/C:/Users/nikhi/Documents/NetBeansProjects/ManageZilla/src/fee_management/Login.java</file>
             <file>file:/C:/Users/nikhi/Documents/NetBeansProjects/ManageZilla/src/fee_management/Addfees.java</file>
+            <file>file:/C:/Users/nikhi/Documents/NetBeansProjects/ManageZilla/src/fee_management/home.java</file>
+            <file>file:/C:/Users/nikhi/Documents/NetBeansProjects/ManageZilla/src/fee_management/PrintReceipt.java</file>
+            <file>file:/C:/Users/nikhi/Documents/NetBeansProjects/ManageZilla/src/fee_management/EditCourse.java</file>
+            <file>file:/C:/Users/nikhi/Documents/NetBeansProjects/ManageZilla/src/fee_management/SearchRecord.java</file>
             <file>file:/C:/Users/nikhi/Documents/NetBeansProjects/ManageZilla/src/fee_management/Sign_up.java</file>
+            <file>file:/C:/Users/nikhi/Documents/NetBeansProjects/ManageZilla/src/fee_management/UpdateFeesDetails.java</file>
         </group>
     </open-files>
 </project-private>

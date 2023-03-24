@@ -6,6 +6,11 @@
 package fee_management;
 
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 
 
@@ -21,6 +26,9 @@ public class Addfees extends javax.swing.JFrame {
     public Addfees() {
         initComponents();
         displaycashfirst();
+        fillComboBox();
+        int receiptNo=getReceiptNo();
+        txt_receiptNo.setText(Integer.toString(receiptNo));
     }
     
     public void displaycashfirst(){
@@ -63,7 +71,99 @@ public class Addfees extends javax.swing.JFrame {
          }
       }
       return true;
-   }        
+   } 
+   
+   public void fillComboBox(){
+       try{
+          Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/ManageZilla","root","");
+          PreparedStatement pst=con.prepareStatement("Select cname from course");
+          ResultSet rs=pst.executeQuery();
+          while(rs.next()){
+             combo_course.addItem(rs.getString("cname")); 
+          }
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+   }
+   
+   public int getReceiptNo(){
+       int receiptNo=0;
+       try{
+           String sql="select max(receipt_no) from fees_details";
+           Connection con =DriverManager.getConnection("jdbc:mysql://localhost:3306/ManageZilla","root","");
+           PreparedStatement pst=con.prepareStatement(sql);
+           ResultSet rs=pst.executeQuery();
+           
+           if(rs.next()){
+              receiptNo= rs.getInt(1);
+           }
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return receiptNo+1;
+   }
+   
+   public String insertData(){
+       String status="";
+       
+       int receiptNo=Integer.parseInt(txt_receiptNo.getText());
+       String studentName=txt_receivedfrom.getText();
+       String rollNo= txt_roll.getText();
+       String paymentMode= combo_payment.getSelectedItem().toString();
+       String chequeNo=txt_chequeNo.getText();
+       String bankName=txt_bankname.getText();
+       String ddNo=txt_ddNo.getText();
+       String courseName=txt_coursename.getText();
+       String gstin=lbl_gstno.getText();
+       float totalAmount=Float.parseFloat(txt_total.getText());
+       SimpleDateFormat dateFormat=new SimpleDateFormat("YYY-MM-DD");
+       String date=dateFormat.format(date_chooser.getDate());
+       float initialAmount=Float.parseFloat(txt_amount.getText());
+       float cgst=Float.parseFloat(txt_cgst.getText());
+       float sgst=Float.parseFloat(txt_sgst.getText());
+       String totalInWords=txt_totalwords.getText();
+       String remark=tfd_remark.getText();
+       int year1=Integer.parseInt(txt_year1.getText());
+       int year2=Integer.parseInt(txt_year2.getText());
+       
+       try{
+           String sql="INSERT INTO fees_details VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+           Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/ManageZilla","root","");
+           PreparedStatement pst=con.prepareStatement(sql);
+           
+           pst.setInt(1,receiptNo);
+           pst.setString(2,studentName);
+           pst.setString(3,rollNo);
+           pst.setString(4,paymentMode);
+           pst.setString(5,chequeNo);
+           pst.setString(6,bankName);
+           pst.setString(7,ddNo);
+           pst.setString(8,courseName);
+           pst.setString(9,gstin);
+           pst.setFloat(10,totalAmount);
+           pst.setString(11,date);
+           pst.setFloat(12,initialAmount);
+           pst.setFloat(13, cgst);
+           pst.setFloat(14,sgst);
+           pst.setString(15,totalInWords);
+           pst.setString(16,remark);
+           pst.setInt(17, year1);
+           pst.setInt(18, year2);
+           
+          int rowCount= pst.executeUpdate();
+           if(rowCount==1){
+               status="Success";
+           }
+           else{
+               status="Failed";
+           }
+           
+       }catch(Exception e){
+           e.printStackTrace();
+       }
+       return status;
+   }
+   
     /**
      * 
      * This method is called from within the constructor to initialize the form.
@@ -142,7 +242,7 @@ public class Addfees extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         kGradientPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        kGradientPanel1.setkEndColor(new java.awt.Color(218, 253, 253));
+        kGradientPanel1.setkEndColor(new java.awt.Color(102, 255, 153));
         kGradientPanel1.setkStartColor(new java.awt.Color(109, 203, 246));
         kGradientPanel1.setPreferredSize(new java.awt.Dimension(1250, 850));
         kGradientPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -370,7 +470,7 @@ public class Addfees extends javax.swing.JFrame {
         kGradientPanel1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 410, 850));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jLabel1.setText("Receipt no: ABC");
+        jLabel1.setText("Receipt no: NPU\n");
         kGradientPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 60, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
@@ -392,6 +492,8 @@ public class Addfees extends javax.swing.JFrame {
         lbl_bankname.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         lbl_bankname.setText("Bank Name :");
         kGradientPanel1.add(lbl_bankname, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 210, -1, -1));
+
+        date_chooser.setDateFormatString("MM dd, yyyy");
         kGradientPanel1.add(date_chooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 60, -1, -1));
 
         combo_payment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Cheque", "DD", "Credit card", "Debit card", " " }));
@@ -426,20 +528,29 @@ public class Addfees extends javax.swing.JFrame {
         kGradientPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 280, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jLabel6.setText("The following payments is for  the year");
+        jLabel6.setText("The following payment is for  the month ");
         kGradientPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 330, -1, -1));
 
         txt_year1.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
-        kGradientPanel1.add(txt_year1, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 330, 90, -1));
+        txt_year1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_year1ActionPerformed(evt);
+            }
+        });
+        kGradientPanel1.add(txt_year1, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 330, 90, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel8.setText("to");
-        kGradientPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 330, -1, -1));
+        kGradientPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 330, -1, -1));
 
         txt_year2.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
-        kGradientPanel1.add(txt_year2, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 330, 90, -1));
+        kGradientPanel1.add(txt_year2, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 330, 90, -1));
 
-        combo_course.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BBA", "BCA", "B.Tech", "MBA", "MCA", "M.Tech" }));
+        combo_course.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                combo_courseActionPerformed(evt);
+            }
+        });
         kGradientPanel1.add(combo_course, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 390, 200, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
@@ -678,7 +789,16 @@ public class Addfees extends javax.swing.JFrame {
 
     private void btn_printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_printActionPerformed
         if(validation()==true){
-            JOptionPane.showMessageDialog(this,"Validation successful");
+        String result=insertData();
+        if(result.equals("Success")){
+            JOptionPane.showMessageDialog(this,"Record inserted Successfully");
+            PrintReceipt p=new PrintReceipt();
+            p.setVisible(true);
+            this.dispose();
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Record Insertion Failed");
+        }
         }
     }//GEN-LAST:event_btn_printActionPerformed
 
@@ -692,6 +812,14 @@ public class Addfees extends javax.swing.JFrame {
        txt_total.setText(Float.toString(total));
        txt_totalwords.setText(NumberToWordsConverter.convert((int)total)+" only.");
     }//GEN-LAST:event_txt_amountActionPerformed
+
+    private void combo_courseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_courseActionPerformed
+      txt_coursename.setText(combo_course.getSelectedItem().toString());
+    }//GEN-LAST:event_combo_courseActionPerformed
+
+    private void txt_year1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_year1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_year1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -792,5 +920,6 @@ public class Addfees extends javax.swing.JFrame {
     private javax.swing.JTextField txt_year1;
     private javax.swing.JTextField txt_year2;
     // End of variables declaration//GEN-END:variables
+
 
 }
