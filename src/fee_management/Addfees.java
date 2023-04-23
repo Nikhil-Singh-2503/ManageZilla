@@ -116,7 +116,7 @@ public class Addfees extends javax.swing.JFrame {
        String courseName=txt_coursename.getText();
        String gstin=lbl_gstno.getText();
        float totalAmount=Float.parseFloat(txt_total.getText());
-       SimpleDateFormat dateFormat=new SimpleDateFormat("YYY-MM-DD");
+       SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
        String date=dateFormat.format(date_chooser.getDate());
        float initialAmount=Float.parseFloat(txt_amount.getText());
        float cgst=Float.parseFloat(txt_cgst.getText());
@@ -125,9 +125,10 @@ public class Addfees extends javax.swing.JFrame {
        String remark=tfd_remark.getText();
        int year1=Integer.parseInt(txt_year1.getText());
        int year2=Integer.parseInt(txt_year2.getText());
+       String transaction_id=txt_transaction.getText();
        
        try{
-           String sql="INSERT INTO fees_details VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+           String sql="INSERT INTO fees_details VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
            Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/ManageZilla","root","");
            PreparedStatement pst=con.prepareStatement(sql);
            
@@ -149,6 +150,8 @@ public class Addfees extends javax.swing.JFrame {
            pst.setString(16,remark);
            pst.setInt(17, year1);
            pst.setInt(18, year2);
+           pst.setString(19,transaction_id);
+           
            
           int rowCount= pst.executeUpdate();
            if(rowCount==1){
@@ -158,7 +161,9 @@ public class Addfees extends javax.swing.JFrame {
                status="Failed";
            }
            
-       }catch(Exception e){
+       }
+       
+       catch(Exception e){
            e.printStackTrace();
        }
        return status;
@@ -236,6 +241,7 @@ public class Addfees extends javax.swing.JFrame {
         lbl_transactionid = new javax.swing.JLabel();
         txt_transaction = new javax.swing.JTextField();
         txt_totalwords = new javax.swing.JTextField();
+        btn_update_fees = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -298,6 +304,9 @@ public class Addfees extends javax.swing.JFrame {
         btn_search.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/search.png"))); // NOI18N
         btn_search.setText("Search Record");
         btn_search.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_searchMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_searchMouseEntered(evt);
             }
@@ -325,8 +334,11 @@ public class Addfees extends javax.swing.JFrame {
         btn_editcourse.setFont(new java.awt.Font("Rockwell Condensed", 1, 30)); // NOI18N
         btn_editcourse.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btn_editcourse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/edit.png"))); // NOI18N
-        btn_editcourse.setText("Edit Course");
+        btn_editcourse.setText("Update Fees");
         btn_editcourse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_editcourseMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_editcourseMouseEntered(evt);
             }
@@ -356,6 +368,9 @@ public class Addfees extends javax.swing.JFrame {
         btn_courselist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/courselist.png"))); // NOI18N
         btn_courselist.setText("Course List");
         btn_courselist.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_courselistMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_courselistMouseEntered(evt);
             }
@@ -386,6 +401,9 @@ public class Addfees extends javax.swing.JFrame {
         btn_allrecord.setText("View all records");
         btn_allrecord.setToolTipText("");
         btn_allrecord.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_allrecordMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_allrecordMouseEntered(evt);
             }
@@ -415,6 +433,9 @@ public class Addfees extends javax.swing.JFrame {
         btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/back.png"))); // NOI18N
         btn_back.setText("Back");
         btn_back.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_backMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_backMouseEntered(evt);
             }
@@ -446,6 +467,9 @@ public class Addfees extends javax.swing.JFrame {
         btn_logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/logout.png"))); // NOI18N
         btn_logout.setText("Logout");
         btn_logout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_logoutMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_logoutMouseEntered(evt);
             }
@@ -570,8 +594,8 @@ public class Addfees extends javax.swing.JFrame {
         kGradientPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 450, -1, -1));
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jLabel14.setText("Head");
-        kGradientPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 450, 50, -1));
+        jLabel14.setText("Course Name");
+        kGradientPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 450, 120, -1));
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel15.setText("Amount");
@@ -579,6 +603,7 @@ public class Addfees extends javax.swing.JFrame {
         kGradientPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 480, 790, 10));
 
         txt_coursename.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+        txt_coursename.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         kGradientPanel1.add(txt_coursename, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 510, 290, -1));
 
         txt_amount.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
@@ -613,28 +638,28 @@ public class Addfees extends javax.swing.JFrame {
         kGradientPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 750, -1, -1));
 
         btn_print.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
-        btn_print.setText("Print");
+        btn_print.setText("Save & Print");
         btn_print.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_printActionPerformed(evt);
             }
         });
-        kGradientPanel1.add(btn_print, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 790, -1, -1));
+        kGradientPanel1.add(btn_print, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 800, -1, -1));
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel16.setText("Total in words :");
-        kGradientPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 630, -1, -1));
+        kGradientPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 570, -1, -1));
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel17.setText("Remarks :");
-        kGradientPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 760, -1, -1));
+        kGradientPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 720, -1, -1));
 
         tfd_remark.setColumns(20);
         tfd_remark.setFont(new java.awt.Font("Monospaced", 0, 20)); // NOI18N
         tfd_remark.setRows(5);
         jScrollPane2.setViewportView(tfd_remark);
 
-        kGradientPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 730, 290, 70));
+        kGradientPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 690, 290, 70));
 
         lbl_transactionid.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         lbl_transactionid.setText("Transaction Id :");
@@ -642,7 +667,16 @@ public class Addfees extends javax.swing.JFrame {
 
         txt_transaction.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
         kGradientPanel1.add(txt_transaction, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 160, 230, -1));
-        kGradientPanel1.add(txt_totalwords, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 670, 460, -1));
+        kGradientPanel1.add(txt_totalwords, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 600, 440, -1));
+
+        btn_update_fees.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        btn_update_fees.setText("Update Fees");
+        btn_update_fees.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_update_feesMouseClicked(evt);
+            }
+        });
+        kGradientPanel1.add(btn_update_fees, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 800, -1, -1));
 
         getContentPane().add(kGradientPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1250, 850));
 
@@ -821,6 +855,48 @@ public class Addfees extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_year1ActionPerformed
 
+    private void btn_searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_searchMouseClicked
+            SearchRecord sr= new SearchRecord();
+        sr.show();
+        this.dispose();
+    }//GEN-LAST:event_btn_searchMouseClicked
+
+    private void btn_editcourseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_editcourseMouseClicked
+        UpdateFeesDetails ufd = new UpdateFeesDetails();
+        ufd.show();
+        this.dispose();
+    }//GEN-LAST:event_btn_editcourseMouseClicked
+
+    private void btn_update_feesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_update_feesMouseClicked
+        UpdateFeesDetails ufd= new UpdateFeesDetails();
+        ufd.show();
+        this.dispose();
+    }//GEN-LAST:event_btn_update_feesMouseClicked
+
+    private void btn_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_backMouseClicked
+        home Home =new home();
+        Home.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_backMouseClicked
+
+    private void btn_logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_logoutMouseClicked
+        Login login=new Login();
+        login.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_logoutMouseClicked
+
+    private void btn_allrecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_allrecordMouseClicked
+       ViewAllRecords val=new ViewAllRecords();
+       val.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_btn_allrecordMouseClicked
+
+    private void btn_courselistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_courselistMouseClicked
+        EditCourse ec= new EditCourse();
+        ec.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_courselistMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -865,6 +941,7 @@ public class Addfees extends javax.swing.JFrame {
     private javax.swing.JLabel btn_logout;
     private javax.swing.JButton btn_print;
     private javax.swing.JLabel btn_search;
+    private javax.swing.JButton btn_update_fees;
     private javax.swing.JComboBox<String> combo_course;
     private javax.swing.JComboBox<String> combo_payment;
     private com.toedter.calendar.JDateChooser date_chooser;

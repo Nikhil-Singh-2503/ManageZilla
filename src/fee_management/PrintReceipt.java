@@ -19,7 +19,7 @@ import java.sql.ResultSet;
 
 /**
  *
- * @author nikhi
+ * @author nikhil
  */
 public class PrintReceipt extends javax.swing.JFrame {
 
@@ -57,9 +57,14 @@ public class PrintReceipt extends javax.swing.JFrame {
               txt_cheque_dd.setText(rs.getString("dd_no"));
               txt_bankname.setText(rs.getString("bank_name"));
           }
-          if(PaymentMode.equalsIgnoreCase("card")){
-              lbl_cheque_dd.setText("Cheque No");
-              txt_cheque_dd.setText(rs.getString("-"));
+          if(PaymentMode.equalsIgnoreCase("Credit card")){
+              lbl_cheque_dd.setText("Transaction ID:-");
+              txt_cheque_dd.setText(rs.getString("transaction_Id"));
+              txt_bankname.setText(rs.getString("bank_name"));
+          }
+          if(PaymentMode.equalsIgnoreCase("Debit card")){
+              lbl_cheque_dd.setText("Transaction ID");
+              txt_cheque_dd.setText(rs.getString("transaction_Id"));
               txt_bankname.setText(rs.getString("bank_name"));
           }
           txt_sno.setText(rs.getString("receipt_no"));
@@ -158,6 +163,7 @@ public class PrintReceipt extends javax.swing.JFrame {
         jLabel25 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         kGradientPanel2.setkEndColor(new java.awt.Color(102, 255, 153));
@@ -251,8 +257,11 @@ public class PrintReceipt extends javax.swing.JFrame {
         btn_editcourse.setFont(new java.awt.Font("Rockwell Condensed", 1, 30)); // NOI18N
         btn_editcourse.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btn_editcourse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/edit.png"))); // NOI18N
-        btn_editcourse.setText("Edit Course");
+        btn_editcourse.setText("Update Fees");
         btn_editcourse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_editcourseMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_editcourseMouseEntered(evt);
             }
@@ -286,6 +295,9 @@ public class PrintReceipt extends javax.swing.JFrame {
         btn_courselist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/courselist.png"))); // NOI18N
         btn_courselist.setText("Course List");
         btn_courselist.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_courselistMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_courselistMouseEntered(evt);
             }
@@ -320,6 +332,9 @@ public class PrintReceipt extends javax.swing.JFrame {
         btn_allrecord.setText("View all records");
         btn_allrecord.setToolTipText("");
         btn_allrecord.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_allrecordMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_allrecordMouseEntered(evt);
             }
@@ -353,6 +368,9 @@ public class PrintReceipt extends javax.swing.JFrame {
         btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/back.png"))); // NOI18N
         btn_back.setText("Back");
         btn_back.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_backMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_backMouseEntered(evt);
             }
@@ -386,6 +404,9 @@ public class PrintReceipt extends javax.swing.JFrame {
         btn_logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/logout.png"))); // NOI18N
         btn_logout.setText("Logout");
         btn_logout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_logoutMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_logoutMouseEntered(evt);
             }
@@ -453,7 +474,7 @@ public class PrintReceipt extends javax.swing.JFrame {
         btn_Edit.setFont(new java.awt.Font("Rockwell Condensed", 1, 30)); // NOI18N
         btn_Edit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btn_Edit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/Edit_it.png"))); // NOI18N
-        btn_Edit.setText("Edit");
+        btn_Edit.setText("Add Fees");
         btn_Edit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_EditMouseClicked(evt);
@@ -539,9 +560,9 @@ public class PrintReceipt extends javax.swing.JFrame {
 
         lbl_cheque_dd.setFont(new java.awt.Font("Imprint MT Shadow", 0, 16)); // NOI18N
         lbl_cheque_dd.setForeground(new java.awt.Color(0, 0, 153));
-        lbl_cheque_dd.setText("Cheque_ddNo:-");
+        lbl_cheque_dd.setText("Cheque No./DD No./Transaction ID:-");
         jPanel2.add(lbl_cheque_dd, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, -1, -1));
-        jPanel2.add(txt_cheque_dd, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 140, 20));
+        jPanel2.add(txt_cheque_dd, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 240, 140, 20));
 
         lbl_bankName.setFont(new java.awt.Font("Imprint MT Shadow", 0, 16)); // NOI18N
         lbl_bankName.setForeground(new java.awt.Color(0, 0, 153));
@@ -565,6 +586,7 @@ public class PrintReceipt extends javax.swing.JFrame {
         jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 280, -1));
 
         txt_month1.setFont(new java.awt.Font("Imprint MT Shadow", 0, 16)); // NOI18N
+        txt_month1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jPanel2.add(txt_month1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 330, 110, 20));
 
         jLabel11.setFont(new java.awt.Font("Imprint MT Shadow", 0, 16)); // NOI18N
@@ -573,6 +595,7 @@ public class PrintReceipt extends javax.swing.JFrame {
         jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 330, 20, -1));
 
         txt_month2.setFont(new java.awt.Font("Imprint MT Shadow", 0, 16)); // NOI18N
+        txt_month2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jPanel2.add(txt_month2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 330, 130, 20));
 
         jLabel13.setFont(new java.awt.Font("Imprint MT Shadow", 0, 16)); // NOI18N
@@ -602,7 +625,7 @@ public class PrintReceipt extends javax.swing.JFrame {
 
         jLabel15.setFont(new java.awt.Font("Imprint MT Shadow", 0, 16)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(0, 0, 153));
-        jLabel15.setText("Heads");
+        jLabel15.setText("Course Name");
         jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 370, -1, -1));
 
         jLabel16.setFont(new java.awt.Font("Imprint MT Shadow", 0, 16)); // NOI18N
@@ -611,6 +634,7 @@ public class PrintReceipt extends javax.swing.JFrame {
         jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 370, -1, -1));
 
         txt_sno.setFont(new java.awt.Font("Imprint MT Shadow", 0, 16)); // NOI18N
+        txt_sno.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jPanel2.add(txt_sno, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, 100, 30));
 
         txt_courseName.setFont(new java.awt.Font("Imprint MT Shadow", 0, 16)); // NOI18N
@@ -671,7 +695,7 @@ public class PrintReceipt extends javax.swing.JFrame {
         jLabel24.setFont(new java.awt.Font("Imprint MT Shadow", 0, 16)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(0, 0, 153));
         jLabel24.setText("Remark:-");
-        jPanel2.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 690, -1, -1));
+        jPanel2.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 700, -1, -1));
 
         txt_remark.setFont(new java.awt.Font("Imprint MT Shadow", 0, 16)); // NOI18N
         jPanel2.add(txt_remark, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 690, 300, 30));
@@ -828,8 +852,8 @@ public class PrintReceipt extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_printItMouseClicked
 
     private void btn_EditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_EditMouseClicked
-        UpdateFeesDetails update=new UpdateFeesDetails();
-        update.setVisible(true);
+        Addfees af=new Addfees();
+        af.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_EditMouseClicked
 
@@ -838,6 +862,36 @@ public class PrintReceipt extends javax.swing.JFrame {
         sr.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_searchMouseClicked
+
+    private void btn_editcourseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_editcourseMouseClicked
+        UpdateFeesDetails ufd =new UpdateFeesDetails();
+        ufd.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_editcourseMouseClicked
+
+    private void btn_courselistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_courselistMouseClicked
+       EditCourse ec=new EditCourse();
+       ec.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_btn_courselistMouseClicked
+
+    private void btn_allrecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_allrecordMouseClicked
+       ViewAllRecords val=new ViewAllRecords();
+       val.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_btn_allrecordMouseClicked
+
+    private void btn_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_backMouseClicked
+        home Home=new home();
+        Home.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_backMouseClicked
+
+    private void btn_logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_logoutMouseClicked
+      Login login =new Login();
+      login.setVisible(true);
+      this.dispose();
+    }//GEN-LAST:event_btn_logoutMouseClicked
 
     /**
      * @param args the command line arguments

@@ -16,7 +16,7 @@ import javax.swing.table.TableRowSorter;
 
 /**
  *
- * @author nikhi
+ * @author nikhil
  */
 public class SearchRecord extends javax.swing.JFrame {
 
@@ -96,6 +96,7 @@ public class SearchRecord extends javax.swing.JFrame {
         txt_search = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         kGradientPanel1.setkEndColor(new java.awt.Color(102, 255, 153));
@@ -183,8 +184,11 @@ public class SearchRecord extends javax.swing.JFrame {
         btn_editcourse.setFont(new java.awt.Font("Rockwell Condensed", 1, 30)); // NOI18N
         btn_editcourse.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btn_editcourse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/edit.png"))); // NOI18N
-        btn_editcourse.setText("Edit Course");
+        btn_editcourse.setText("Update Fees");
         btn_editcourse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_editcourseMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_editcourseMouseEntered(evt);
             }
@@ -214,6 +218,9 @@ public class SearchRecord extends javax.swing.JFrame {
         btn_courselist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/courselist.png"))); // NOI18N
         btn_courselist.setText("Course List");
         btn_courselist.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_courselistMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_courselistMouseEntered(evt);
             }
@@ -244,6 +251,9 @@ public class SearchRecord extends javax.swing.JFrame {
         btn_allrecord.setText("View all records");
         btn_allrecord.setToolTipText("");
         btn_allrecord.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_allrecordMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_allrecordMouseEntered(evt);
             }
@@ -273,6 +283,9 @@ public class SearchRecord extends javax.swing.JFrame {
         btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/back.png"))); // NOI18N
         btn_back.setText("Back");
         btn_back.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_backMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_backMouseEntered(evt);
             }
@@ -304,6 +317,9 @@ public class SearchRecord extends javax.swing.JFrame {
         btn_logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/logout.png"))); // NOI18N
         btn_logout.setText("Logout");
         btn_logout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_logoutMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_logoutMouseEntered(evt);
             }
@@ -333,7 +349,7 @@ public class SearchRecord extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Receipt no", "Roll no", "Student name", "Course", "Payment Mode", "Amount ", "Remark"
+                "Receipt no", "Roll no", "Student name", "Payment Mode", "Course", "Amount ", "Remark"
             }
         ));
         jScrollPane1.setViewportView(tbl_studentdata);
@@ -454,6 +470,36 @@ public class SearchRecord extends javax.swing.JFrame {
         sr.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btn_searchMouseClicked
+
+    private void btn_editcourseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_editcourseMouseClicked
+        UpdateFeesDetails ufd=new UpdateFeesDetails();
+        ufd.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_editcourseMouseClicked
+
+    private void btn_courselistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_courselistMouseClicked
+        EditCourse ec=new EditCourse();
+        ec.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_courselistMouseClicked
+
+    private void btn_allrecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_allrecordMouseClicked
+        ViewAllRecords val=new ViewAllRecords();
+        val.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_allrecordMouseClicked
+
+    private void btn_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_backMouseClicked
+       home Home= new home();
+       Home.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_btn_backMouseClicked
+
+    private void btn_logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_logoutMouseClicked
+       Login login=new Login();
+       login.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_btn_logoutMouseClicked
 
     /**
      * @param args the command line arguments

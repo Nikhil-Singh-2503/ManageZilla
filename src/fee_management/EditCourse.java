@@ -6,17 +6,130 @@
 package fee_management;
 
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 /**
  *
- * @author nikhi
+ * @author nikhil
  */
 public class EditCourse extends javax.swing.JFrame {
 
     /**
      * Creates new form EditCourse
      */
+    DefaultTableModel model;
     public EditCourse() {
         initComponents();
+        setRecordsToTable();
+    }
+    
+    public void setRecordsToTable(){
+      try{
+          String sql="select * from course";
+         Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/ManageZilla","root","");
+           PreparedStatement pst=con.prepareStatement(sql);
+          ResultSet rs=pst.executeQuery();
+          
+          while(rs.next()){
+              String courseId=rs.getString("Id");
+              String cname=rs.getString("CNAME");
+              String cost=rs.getString("COST");
+             
+              
+              Object[] obj= {courseId,cname,cost};
+              
+              model=(DefaultTableModel)tbl_courseData.getModel();
+              model.addRow(obj);
+          }
+          
+          
+      } catch(Exception e){
+          e.printStackTrace();
+      } 
+    }
+    
+    public void addCourse(int id, String cname, double cost){
+        try{
+            String sql="insert into course values(?,?,?)";
+         Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/ManageZilla","root","");
+           PreparedStatement pst=con.prepareStatement(sql);
+           pst.setInt(1, id);
+           pst.setString(2,cname);
+           pst.setDouble(3, cost);
+          int rowCount=pst.executeUpdate();
+          if(rowCount==1){
+              JOptionPane.showMessageDialog(this,"Course added successfully");
+              clearTable();
+              setRecordsToTable();
+          }
+          else{
+              JOptionPane.showMessageDialog(this,"Course insertion failed");
+          }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(this,"Course insertion failed");
+            e.printStackTrace();
+        }
+    }
+    
+   
+     public void update(int id, String cname, double cost){
+                try{
+            String sql="update course set cname=?,cost=? where id=?";
+         Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/ManageZilla","root","");
+           PreparedStatement pst=con.prepareStatement(sql);
+           
+           pst.setString(1,cname);
+           pst.setDouble(2, cost);
+           pst.setInt(3, id);
+          int rowCount=pst.executeUpdate();
+          if(rowCount==1){
+              JOptionPane.showMessageDialog(this,"Course Updated successfully");
+              clearTable();
+              setRecordsToTable();
+          }
+          else{
+              JOptionPane.showMessageDialog(this,"Course Updation failed");
+          }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(this,"Course Updation failed");
+            e.printStackTrace();
+        }
+    }
+     
+      public void delete (int id){
+                try{
+            String sql="delete from course where id=?";
+         Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/ManageZilla","root","");
+           PreparedStatement pst=con.prepareStatement(sql);
+
+           pst.setInt(1, id);
+          int rowCount=pst.executeUpdate();
+          if(rowCount==1){
+              JOptionPane.showMessageDialog(this,"Course Deleted successfully");
+              clearTable();
+              setRecordsToTable();
+          }
+          else{
+              JOptionPane.showMessageDialog(this,"Course Deletion failed");
+          }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(this,"Course Deletion failed");
+            e.printStackTrace();
+        }
+    }
+    
+    
+    public void clearTable(){
+        DefaultTableModel model =(DefaultTableModel)tbl_courseData.getModel();
+        model.setRowCount(0);
     }
 
     /**
@@ -45,13 +158,21 @@ public class EditCourse extends javax.swing.JFrame {
         panellogout = new javax.swing.JPanel();
         btn_logout = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbl_courseData = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txt_courseId = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txt_courseName = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        txt_coursePrice = new javax.swing.JTextField();
+        btn_Add = new javax.swing.JButton();
+        btn_update = new javax.swing.JButton();
+        btn_delete = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         kGradientPanel1.setkEndColor(new java.awt.Color(102, 255, 153));
@@ -89,7 +210,7 @@ public class EditCourse extends javax.swing.JFrame {
         panelhome.setLayout(panelhomeLayout);
         panelhomeLayout.setHorizontalGroup(
             panelhomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btn_home, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btn_home, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
         );
         panelhomeLayout.setVerticalGroup(
             panelhomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,6 +230,9 @@ public class EditCourse extends javax.swing.JFrame {
         btn_search.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/search.png"))); // NOI18N
         btn_search.setText("Search Record");
         btn_search.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_searchMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_searchMouseEntered(evt);
             }
@@ -136,8 +260,11 @@ public class EditCourse extends javax.swing.JFrame {
         btn_editcourse.setFont(new java.awt.Font("Rockwell Condensed", 1, 30)); // NOI18N
         btn_editcourse.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btn_editcourse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/edit.png"))); // NOI18N
-        btn_editcourse.setText("Edit Course");
+        btn_editcourse.setText("Update Fees");
         btn_editcourse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_editcourseMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_editcourseMouseEntered(evt);
             }
@@ -150,7 +277,7 @@ public class EditCourse extends javax.swing.JFrame {
         paneledit.setLayout(paneleditLayout);
         paneleditLayout.setHorizontalGroup(
             paneleditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btn_editcourse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btn_editcourse, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
         );
         paneleditLayout.setVerticalGroup(
             paneleditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,6 +294,9 @@ public class EditCourse extends javax.swing.JFrame {
         btn_courselist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/courselist.png"))); // NOI18N
         btn_courselist.setText("Course List");
         btn_courselist.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_courselistMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_courselistMouseEntered(evt);
             }
@@ -197,6 +327,9 @@ public class EditCourse extends javax.swing.JFrame {
         btn_allrecord.setText("View all records");
         btn_allrecord.setToolTipText("");
         btn_allrecord.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_allrecordMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_allrecordMouseEntered(evt);
             }
@@ -213,7 +346,7 @@ public class EditCourse extends javax.swing.JFrame {
         );
         panelallrecordLayout.setVerticalGroup(
             panelallrecordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btn_allrecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btn_allrecord, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
         );
 
         jPanel1.add(panelallrecord, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 500, 300, 60));
@@ -226,6 +359,9 @@ public class EditCourse extends javax.swing.JFrame {
         btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/back.png"))); // NOI18N
         btn_back.setText("Back");
         btn_back.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_backMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_backMouseEntered(evt);
             }
@@ -244,7 +380,7 @@ public class EditCourse extends javax.swing.JFrame {
         );
         panelbackLayout.setVerticalGroup(
             panelbackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btn_back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btn_back, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
         );
 
         jPanel1.add(panelback, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 610, 300, 60));
@@ -257,6 +393,9 @@ public class EditCourse extends javax.swing.JFrame {
         btn_logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/img_addfees/logout.png"))); // NOI18N
         btn_logout.setText("Logout");
         btn_logout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_logoutMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_logoutMouseEntered(evt);
             }
@@ -280,7 +419,7 @@ public class EditCourse extends javax.swing.JFrame {
 
         kGradientPanel1.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 410, 850));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbl_courseData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -288,15 +427,21 @@ public class EditCourse extends javax.swing.JFrame {
                 "Course Id", "Course name", "Course fee"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tbl_courseData.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_courseDataMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tbl_courseData);
 
-        kGradientPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 60, -1, 720));
+        kGradientPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 100, -1, 720));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Course ID :");
-        kGradientPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 170, -1, -1));
+        jLabel1.setText("Course Price :");
+        kGradientPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 400, -1, -1));
 
+        txt_courseId.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
         txt_courseId.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         kGradientPanel1.add(txt_courseId, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 210, 260, 40));
 
@@ -304,7 +449,55 @@ public class EditCourse extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Course Name :");
         kGradientPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 290, -1, -1));
-        kGradientPanel1.add(txt_courseName, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 340, 250, 40));
+
+        txt_courseName.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        txt_courseName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        kGradientPanel1.add(txt_courseName, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 330, 260, 40));
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Course ID :");
+        kGradientPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 170, -1, -1));
+
+        txt_coursePrice.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        txt_coursePrice.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        kGradientPanel1.add(txt_coursePrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 440, 260, 40));
+
+        btn_Add.setBackground(new java.awt.Color(0, 204, 102));
+        btn_Add.setFont(new java.awt.Font("Sylfaen", 1, 20)); // NOI18N
+        btn_Add.setText("Add");
+        btn_Add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_AddActionPerformed(evt);
+            }
+        });
+        kGradientPanel1.add(btn_Add, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 530, 110, 40));
+
+        btn_update.setBackground(new java.awt.Color(0, 204, 102));
+        btn_update.setFont(new java.awt.Font("Sylfaen", 1, 20)); // NOI18N
+        btn_update.setText("Update");
+        btn_update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_updateActionPerformed(evt);
+            }
+        });
+        kGradientPanel1.add(btn_update, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 530, 110, 40));
+
+        btn_delete.setBackground(new java.awt.Color(0, 204, 102));
+        btn_delete.setFont(new java.awt.Font("Sylfaen", 1, 20)); // NOI18N
+        btn_delete.setText("Delete");
+        btn_delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_deleteActionPerformed(evt);
+            }
+        });
+        kGradientPanel1.add(btn_delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 600, 100, 40));
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/book_shelf.png"))); // NOI18N
+        kGradientPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 60, 50, -1));
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fee_management/Books.png"))); // NOI18N
+        kGradientPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 90, -1, -1));
 
         getContentPane().add(kGradientPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1250, 850));
 
@@ -393,6 +586,73 @@ public class EditCourse extends javax.swing.JFrame {
         panellogout.setBackground(clr);
     }//GEN-LAST:event_btn_logoutMouseExited
 
+    private void tbl_courseDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_courseDataMouseClicked
+      int rowNo= tbl_courseData.getSelectedRow();
+      TableModel model= tbl_courseData.getModel();
+      
+      txt_courseId.setText(model.getValueAt(rowNo,0).toString());
+      txt_courseName.setText((String)model.getValueAt(rowNo, 1));
+      txt_coursePrice.setText((String)model.getValueAt(rowNo,2));
+    }//GEN-LAST:event_tbl_courseDataMouseClicked
+
+    private void btn_AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AddActionPerformed
+        int id=Integer.parseInt(txt_courseId.getText());
+        String cname=txt_courseName.getText();
+        double cost=Double.parseDouble(txt_coursePrice.getText());
+        
+        addCourse(id,cname,cost);
+    }//GEN-LAST:event_btn_AddActionPerformed
+
+    private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
+    
+        int id=Integer.parseInt(txt_courseId.getText());
+        String cname=txt_courseName.getText();
+        double cost=Double.parseDouble(txt_coursePrice.getText());
+        
+        update(id,cname,cost);
+    }//GEN-LAST:event_btn_updateActionPerformed
+
+    private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
+        int id=Integer.parseInt(txt_courseId.getText());
+        delete(id);
+    }//GEN-LAST:event_btn_deleteActionPerformed
+
+    private void btn_searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_searchMouseClicked
+      SearchRecord sr=new SearchRecord();
+      sr.setVisible(true);
+      this.dispose();
+    }//GEN-LAST:event_btn_searchMouseClicked
+
+    private void btn_editcourseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_editcourseMouseClicked
+       UpdateFeesDetails ufd=new UpdateFeesDetails();
+       ufd.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_btn_editcourseMouseClicked
+
+    private void btn_courselistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_courselistMouseClicked
+       EditCourse ec=new EditCourse();
+       ec.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_btn_courselistMouseClicked
+
+    private void btn_allrecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_allrecordMouseClicked
+        ViewAllRecords val=new ViewAllRecords();
+        val.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_allrecordMouseClicked
+
+    private void btn_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_backMouseClicked
+       home Home=new home();
+       Home.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_btn_backMouseClicked
+
+    private void btn_logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_logoutMouseClicked
+       Login login=new Login();
+       login.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_btn_logoutMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -429,18 +689,23 @@ public class EditCourse extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_Add;
     private javax.swing.JLabel btn_allrecord;
     private javax.swing.JLabel btn_back;
     private javax.swing.JLabel btn_courselist;
+    private javax.swing.JButton btn_delete;
     private javax.swing.JLabel btn_editcourse;
     private javax.swing.JLabel btn_home;
     private javax.swing.JLabel btn_logout;
     private javax.swing.JLabel btn_search;
+    private javax.swing.JButton btn_update;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private keeptoo.KGradientPanel kGradientPanel1;
     private javax.swing.JPanel panelallrecord;
     private javax.swing.JPanel panelback;
@@ -449,7 +714,9 @@ public class EditCourse extends javax.swing.JFrame {
     private javax.swing.JPanel panelhome;
     private javax.swing.JPanel panellogout;
     private javax.swing.JPanel panelsearch;
+    private javax.swing.JTable tbl_courseData;
     private javax.swing.JTextField txt_courseId;
     private javax.swing.JTextField txt_courseName;
+    private javax.swing.JTextField txt_coursePrice;
     // End of variables declaration//GEN-END:variables
 }

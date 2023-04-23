@@ -7,7 +7,7 @@ package fee_management;
 
 /**
  *
- * @author nikhi
+ * @author nikhil
  */
 public class About_page extends javax.swing.JFrame {
 
@@ -40,6 +40,7 @@ public class About_page extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         kGradientPanel1.setkEndColor(new java.awt.Color(0, 255, 204));
@@ -63,7 +64,7 @@ public class About_page extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 30)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel3.setText("Copyright, 2022 All right reserved");
+        jLabel3.setText("Copyright@2023, All rights reserved");
         kGradientPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -100,16 +101,19 @@ public class About_page extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("<html>Thanks for the love and support.\n<br>\n<br>\n<br>\nReach us at :-<b><u> kirtidesigner2@gmail.com</u></b></html>");
+        jLabel7.setText("<html>Thanks for the love and support.\n<br>\n<br>\n<br>\nReach us at :-<b><u> kirtidesigner2@gmail.com</u>\n</b><br>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp<b><u>nikhilraj7654@gmail.com</b></u></html>");
         kGradientPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 420, -1, -1));
 
         getContentPane().add(kGradientPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1250, 850));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      // TODO add your handling code here:
+     home Home =new home();
+     Home.setVisible(true);
+     this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

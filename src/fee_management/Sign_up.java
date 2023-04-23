@@ -404,7 +404,7 @@ public class Sign_up extends javax.swing.JFrame {
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("<html>Bored of paperwork....? Try us<br><p><h1 style =\"color: yellow;\">Manage all transactions at your fingertips.\n\n");
+        jLabel12.setText("<html>Bored of paperwork....? Try us !!<br><p><h1 style =\"color: yellow;\">Manage all transactions at your fingertips.\n\n");
 
         javax.swing.GroupLayout kGradientPanel1Layout = new javax.swing.GroupLayout(kGradientPanel1);
         kGradientPanel1.setLayout(kGradientPanel1Layout);
