@@ -9,3 +9,14 @@
 
 
 <img width="618" alt="Screenshot_20221222_091605" src="https://user-images.githubusercontent.com/123233659/229716612-8ca35dc9-e813-408d-8640-e23ba03bc47e.png">
+
+NOTE:- Make sure to add KGradientPanel.jar and MYSQLConnector file to the libraries to use.
+
+
+# How to setup
+
+Step1:- Download this github repository and import it into NetbeansIDE.
+Step2:-  Make sure to add KGradientPanel.jar file to the libraries to use. To do this open project Managezilla then go to library and click on library, there you find Add JAR file/ folder option then you select the location path of your KGradientPanel and MYSQLConnector. 
+Step3:- I have used XAMPP server to run MYSQL. You have to provide your MYSQL connection link to the file.
+Step4:- Start the server and MySQL services.
+Step5:- Click on Run Project to run the project.
